@@ -1,4 +1,4 @@
-export async function fetchData() {
+export async function fetchData(meal) {
   const data = await fetch(
     `${process.env.REACT_APP_SEAFOOD}${meal}`
   ).then((response) => response.json())

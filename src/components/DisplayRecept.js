@@ -1,40 +1,32 @@
 import {
+  Button,
   GridList,
   GridListTile,
   GridListTileBar,
-  IconButton,
   makeStyles,
   Typography,
   useMediaQuery
 } from "@material-ui/core"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import DisplaySingleMeal from "./DisplaySingleMeal"
-import { fetchData, fetchMeal } from "./fetchData"
+import { fetchMeal } from "./fetchData"
 
 const useStyles = makeStyles((theme) => ({
   container: {
     background: theme.palette.primary.light
-    // border: "2px solid red"
-  }
+    // paddingTop: theme.spacing(10)
+  },
+  placeholder: theme.mixins.toolbar /* {height: theme.mixins.toolbar} */
 }))
 
-export default function DisplayRecept() {
-  // const undermd = useMediaQuery((theme) => theme.breakpoints.up("md"))
+export default function DisplayRecept({ meals }) {
+  const overmd = useMediaQuery((theme) => theme.breakpoints.up("md"))
 
   const [open, setOpen] = useState(false)
-  const [meals, setMeals] = useState()
   const [singleMeal, setSingleMeal] = useState()
 
   const classes = useStyles()
 
-  useEffect(() => {
-    addData()
-  }, [])
-
-  async function addData() {
-    const data = await fetchData()
-    setMeals(data.meals)
-  }
   function handleClick(id) {
     // setSelectedMeal(id)
     handleFetchMeal(id)
@@ -56,6 +48,7 @@ export default function DisplayRecept() {
 
   return (
     <div className={classes.container}>
+      <div className={classes.placeholder} />
       <DisplaySingleMeal
         singleMeal={singleMeal}
         open={open}
@@ -69,13 +62,13 @@ export default function DisplayRecept() {
             <img src={elem.strMealThumb} alt="see siin" />
             <GridListTileBar
               actionIcon={
-                <IconButton v onClick={(e) => handleClick(elem.idMeal)}>
-                  <Typography color="primary" variant="body2">
+                <Button onClick={(e) => handleClick(elem.idMeal)}>
+                  <Typography color="secondary" variant="body2">
                     Read more
                   </Typography>
-                </IconButton>
+                </Button>
               }
-              title={elem.strMeal}
+              title={overmd ? elem.strMeal : null}
             />
           </GridListTile>
         ))}
